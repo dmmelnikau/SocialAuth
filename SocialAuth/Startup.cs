@@ -34,6 +34,25 @@ namespace SocialAuth
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            {
+                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            })
+               .AddGoogle(options =>
+               {
+                   IConfigurationSection googleAuthNSection =
+                       Configuration.GetSection("Authentication:Google");
+
+                   options.ClientId = googleAuthNSection["ClientId"];
+                   options.ClientSecret = googleAuthNSection["ClientSecret"];
+               })
+               .AddGitHub("Github", options =>
+               {
+                   options.ClientId = Configuration["Authentication:GitHub:ClientId"];
+                   options.ClientSecret = Configuration["Authentication:GitHub:ClientSecret"];
+               });
+
             services.AddControllersWithViews();
         }
 
