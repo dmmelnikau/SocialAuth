@@ -8,17 +8,17 @@
 
 <table class="table table-sm table-bordered">
     <tr>
-        <th>Id</th>
-        <th>UserName</th>
-        <th>Email</th>
+        <th><a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]">Id</a></th>
+        <th><a asp-action="Index" asp-route-sortOrder="@ViewData["UserNameSortParm"]">UserName</a></th>
+        <th><a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a></th>
     </tr>
 
-    @foreach (var user in Model.OrderBy(x => x.UserName))
+    @foreach (var user in Model)
     {
 <tr>
-    <td>@user.Id</td>
-    <td>@user.UserName</td>
-    <td>@user.Email</td>
+    <td>@Html.DisplayFor(modelItem => user.Id)</td>
+    <td>@Html.DisplayFor(modelItem => user.UserName)</td>
+    <td>@Html.DisplayFor(modelItem => user.Email)</td>
 </tr>
     }
 </table>

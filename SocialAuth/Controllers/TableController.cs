@@ -18,9 +18,35 @@ namespace SocialAuth.Controllers
         {
             applicationDbContext = applicationDb;
         }
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult>Index(string sortOrder)
         {
-            return View(await applicationDbContext.Users.ToListAsync());
+            
+            ViewData["UserNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_order";
+            ViewData["EmailSortParm"] = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "email_order";
+            ViewData["IdSortParm"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            var sort = from s in applicationDbContext.Users select s;
+            switch (sortOrder)
+            {
+                case "id_desc":
+                    sort = sort.OrderByDescending(s => s.Id);
+                    break;
+                case "email_order":
+                    sort = sort.OrderBy(s => s.Email);
+                    break;
+                case "email_desc":
+                    sort = sort.OrderByDescending(s => s.Email);
+                    break;
+                case "name_desc":
+                    sort = sort.OrderByDescending(s => s.UserName);
+                    break;
+                  case "name_order":
+                    sort = sort.OrderBy(s => s.UserName);
+                    break;
+              default:
+                    sort = sort.OrderBy(s => s.Id);
+                    break;
+            }
+            return View(await sort.AsNoTracking().ToListAsync());
         }
     }
 }
