@@ -1,8 +1,37 @@
-﻿@{
+﻿@using SocialAuth.Data
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<div id="chart"></div>
+ 
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <script type="text/javascript">
+
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Google', @ViewBag.Google],
+                ['Microsoft', @ViewBag.Microsoft],
+                ['Github', @ViewBag.Github],
+            ]);
+            var options = {
+                'title': 'Social Auth stat',
+                'width': 1000,
+                'height': 700
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('chart'));
+            chart.draw(data, options);
+        }
+    </script>
+}
