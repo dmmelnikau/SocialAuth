@@ -1,24 +1,53 @@
 ﻿@using SocialAuth.Data
-@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+@model List<SocialAuth.Models.ApplicationUser>
 @{
     ViewBag.Title = "Index";
+    ViewBag.Active = "Active";
+    ViewBag.Block = "Block";
 }
 
 <h2 class="bg-primary m-1 p-1 text-white">Users</h2>
-
 <table class="table table-sm table-bordered">
     <tr>
+        <th><input type="checkbox" id="checkAll" /></th>
         <th><a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]">Id</a></th>
         <th><a asp-action="Index" asp-route-sortOrder="@ViewData["UserNameSortParm"]">UserName</a></th>
-        <th><a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a></th>
+        <th><a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">Status</a></th>
     </tr>
 
     @foreach (var user in Model)
     {
 <tr>
+    <td>
+        <input type="checkbox" class="checkBox"
+               value="@user.Id" />
+    </td>
     <td>@Html.DisplayFor(modelItem => user.Id)</td>
     <td>@Html.DisplayFor(modelItem => user.UserName)</td>
-    <td>@Html.DisplayFor(modelItem => user.Email)</td>
+    <td>
+        @if (@user.Status == true)
+        {@ViewBag.Active;
+    }
+    else
+    {@ViewBag.Block;
+}
+    </td>
+
 </tr>
     }
 </table>
+@section scripts{
+<script>
+    $(document).ready(function () {
+
+    $("#checkAll").click(function () {
+        $(".checkBox").prop('checked', 
+            $(this).prop('checked'));
+    });
+
+    
+    });
+});
+
+</script>
+}
